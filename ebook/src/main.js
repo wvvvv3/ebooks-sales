@@ -5,9 +5,15 @@ import App from './App'
 import router from './router'
 import iView from 'iview'
 import 'iview/dist/styles/iview.css'
+import Vuetify from 'vuetify'
+import VueResource from 'vue-resource'
+
+// import 'vuetify/dist/vuetify.min.css'
 
 Vue.config.productionTip = false
 Vue.use(iView)
+Vue.use(Vuetify)
+Vue.use(VueResource)
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

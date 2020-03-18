@@ -14,7 +14,9 @@
     "babel-plugin-transform-es2015-modules-commonjs": "^6.26.2",
     "iview": "^3.5.4",
     "vue": "^2.5.2",
+    "vue-resource": "^1.5.1",
     "vue-router": "^3.0.1",
+    "vuetify": "^2.2.10",
     "vueui": "^0.1.4"
   },
   "devDependencies": {
