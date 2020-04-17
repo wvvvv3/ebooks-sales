@@ -11,23 +11,24 @@
       >注册</div>
       <!-- 登录 -->
       <i-form v-if="iflogin">
-        <Form-item
-          label="用户名"
-          prop="age"
-        >
-          <i-input type="text"></i-input>
+        <Form-item label="用户名">
+          <i-input
+            v-model="username"
+            type="text"
+          ></i-input>
         </Form-item>
-        <Form-item
-          label="密码"
-          prop="passwd"
-        >
-          <i-input type="password"></i-input>
+        <Form-item label="密码">
+          <i-input
+            v-model="password"
+            type="password"
+          ></i-input>
         </Form-item>
 
         <Form-item>
           <i-button
             type="primary"
             size="large"
+            @click="login"
           >登录</i-button>
           <!-- <i-button
             style="margin-left: 8px"
@@ -78,12 +79,44 @@ export default {
   data () {
     return {
       single: false,
-      iflogin: true
+      iflogin: true,
+      username: "",
+      password: ""
     }
   },
   methods: {
     loadData () {
-      this.$http.get('/ebook/student').then((resp) => {
+      // this.$http.get('/ebook/login',{param:{u}}).then((resp) => {
+      //   if (resp === null && resp.data === null) {
+      //     this.$message({
+      //       type: 'error',
+      //       message: '服务端数据格式错误'
+      //     })
+      //     return
+      //   }
+      //   // if (resp.data.code === 0 && resp.data.data != null) {
+      //   //   this.rateList = resp.data.data
+      //   //   this.getIspList()
+      //   // }
+      //   console.log(resp)
+      // })
+
+    },
+    // 点击选择登录按钮
+    tologin () {
+      this.iflogin = true
+    },
+    // 点击选择注册按钮
+    tologon () {
+      this.iflogin = false
+    },
+    // 点击登录按钮
+    login () {
+      var config = {
+        username: this.username,
+        password: this.password
+      }
+      this.$http.get('/ebook/login', { params: config }).then((resp) => {
         if (resp === null && resp.data === null) {
           this.$message({
             type: 'error',
@@ -91,22 +124,21 @@ export default {
           })
           return
         }
-        // if (resp.data.code === 0 && resp.data.data != null) {
-        //   this.rateList = resp.data.data
-        //   this.getIspList()
-        // }
-        console.log(resp)
+        if (resp.data !== -1) {
+          console.log(resp.data)
+          //设置Vuex登录标志为true，默认userLogin为false
+          this.$store.dispatch("userLogin", true);
+          //Vuex在用户刷新的时候userLogin会回到默认值false，所以我们需要用到HTML5储存
+          //我们设置一个名为Flag，值为isLogin的字段，作用是如果Flag有值且为isLogin的时候，证明用户已经登录了。
+          localStorage.setItem("Flag", "isLogin");
+          localStorage.setItem("Uid", resp.data);
+          //iViewUi的友好提示
+          // this.$Message.success(data.data.message);
+          //登录成功后跳转到指定页面
+          this.$router.push("/");
+          this.$store.commit('setUserId', resp.data)
+        }
       })
-      //   }
-      // })
-    },
-    // 点击登录按钮
-    tologin () {
-      this.iflogin = true
-    },
-    // 点击注册按钮
-    tologon () {
-      this.iflogin = false
     }
   },
   mounted () {

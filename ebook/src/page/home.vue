@@ -1,48 +1,25 @@
 <template>
   <div class="bg">
     <div class="header">
-      <div class="user_menu">
 
-        <!-- 购物车 -->
-        <Icon
-          type="ios-cart"
-          style="font-size:25px;margin-left:10px;"
-        />
-        <!-- 书架 -->
-        <Icon
-          type="ios-book-outline"
-          style="font-size:25px;margin-left:10px;"
-        />
-        <!-- 用户 -->
-        <Dropdown>
-          <a
-            href="javascript:void(0)"
-            style="color:#000;"
-          >
-            <Icon
-              type="md-contact"
-              style="font-size:25px;margin-left:10px;"
-            />
-          </a>
-          <DropdownMenu slot="list">
-            <DropdownItem class="user_DropdownItem">个人信息</DropdownItem>
-            <DropdownItem class="user_DropdownItem">我的订单</DropdownItem>
-            <DropdownItem class="user_DropdownItem">我的书架</DropdownItem>
-            <DropdownItem class="user_DropdownItem">我的购物车</DropdownItem>
-            <DropdownItem class="user_DropdownItem">退出登录</DropdownItem>
-          </DropdownMenu>
-        </Dropdown>
-      </div>
+      <Head class="user_menu"></Head>
     </div>
     <!-- 标题和搜索 -->
     <div class="title">
       <!-- 豆瓣读书 -->
       <p style="font-size:25px;color:#4c3218;display: inline-block;float:left;line-height:80px;margin-left:50px;font-weight:900;">豆瓣读书</p>
+
       <Input
         search
         placeholder="书名、作者、ISBN"
         style="width:600px;margin:25px;position:absolute;left:200px;"
       />
+      <!-- <img
+        src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1585031875773&di=48906390ab17ea57c1eaabd279269c5a&imgtype=0&src=http%3A%2F%2Fwww.17qq.com%2Fimg_qqtouxiang%2F11862985.jpeg"
+        style="width:60px;height:60px;position:absolute;right:50px;top:10px;"
+        alt=""
+      > -->
+
     </div>
     <div class="all_body">
       <!-- 轮播图 -->
@@ -78,8 +55,8 @@
           v-for="(item,index) in editorList"
           :key="index"
           class="mid_body_book"
+          @click="jumpToBook(index,'editorList')"
         >
-          <!-- {{item}} -->
           <img
             :src=item.Pic
             alt=""
@@ -98,6 +75,7 @@
           v-for="(item,index) in sdList"
           :key="index"
           class="mid_body_book"
+          @click="jumpToList(index)"
         >
           <img
             :src=item.List_pic
@@ -110,64 +88,81 @@
           >{{item.List_name}}</p>
         </div>
       </div>
+      <!-- {{categoryList[0].p}} -->
       <!-- 分类 -->
-      <div class="mid_body">
-        <p class="body_title">书籍分类</p>
+      <div
+        class="mid_body"
+        v-for="(item,index) in categoryList"
+        :key="index"
+      >
+        <p class="body_title">{{item.Category_name}}</p>
+        <!-- {{item.ebookMsg[0].Name}} -->
         <div
-          v-for="(item,index) in list"
-          :key="index"
+          v-for="(items,indexs) in item.ebookMsg"
+          :key="indexs"
           class="mid_body_book"
+          @click="jumpToCategoryBook(index,indexs)"
         >
+          <img
+            :src=items.Pic
+            alt=""
+            class="body_pic"
+          >
+          <p
+            align="left"
+            class="body_name"
+          >{{items.Name}}</p>
 
         </div>
       </div>
       <!-- 畅销书图书榜 -->
       <div class="right_body">
         <div class="body_title_height">
-          <p class="body_title">畅销图书榜</p>
+          <p class="body_title_right">畅销图书榜</p>
         </div>
 
         <div
           v-for="(item,indexs) in buyTimesList"
           :key="indexs"
           class="right_body_book"
+          @click="jumpToBook(indexs,'buyTimesList')"
         >
-          {{indexs+1}}.<a
+          <p
             href=""
-            style="color:#000;font-size:13px;"
-          >{{item.name}}</a>
+            style="color:#000;font-size:13px;cursor: pointer;"
+          > {{indexs+1}}.{{item.name}}</p>
 
         </div>
       </div>
       <!-- 高分图书榜 -->
       <div class="right_body">
         <div class="body_title_height">
-          <p class="body_title">高分图书榜</p>
+          <p class="body_title_right">高分图书榜</p>
         </div>
         <div
           v-for="(item,indexs) in gradeList"
           :key="indexs"
           class="right_body_book"
+          @click="jumpToBook(indexs,'gradeList')"
         >
-          {{indexs+1}}.<a
+          <p
             href=""
-            style="color:#000;font-size:13px;"
-          >{{item.name}}</a>
+            style="color:#000;font-size:13px;cursor: pointer;"
+          >{{indexs+1}}.{{item.name}}</p>
 
         </div>
       </div>
       <!-- 分类 -->
       <div class="right_body">
         <div class="body_title_height">
-          <p class="body_title">图书分类</p>
+          <p class="body_title_right">图书分类</p>
         </div>
         <div
           v-for="(item,indexs) in categoryList"
           :key="indexs"
-          class="right_body_book"
+          class="right_body_category"
         >
           <p class="right_body_font">{{item.Category_name}}</p>
-          <!-- <a href="">item</a> -->
         </div>
       </div>
     </div>
@@ -175,7 +170,12 @@
 </template>
 
 <script>
+import head from '@/components/head.vue'
+import Vue from 'vue'
 export default {
+  components: {
+    'Head': head
+  },
   data () {
     return {
       rotation_value: 0,
@@ -185,13 +185,16 @@ export default {
       editorList: [],
       sdList: [],
       categoryList: [],
+      categoryBookList: [],
       buyTimesList: [],
       gradeList: [],
-      msgList: []
+      msgList: [],
+      ebookMsgList: []
     }
   },
   methods: {
     loadData () {
+      console.log(this.$store.getters.userId, 'xixi', this.$store.getters.isLogin)
       // 获取小编推荐书籍封面
       this.$http.get('/ebook/editors').then((resp) => {
         if (resp === null && resp.data === null) {
@@ -234,9 +237,32 @@ export default {
           return
         } else {
           this.categoryList = resp.data
-          // for (var i = 0; i < this.categoryList.length; i++) {
-          // this.categoryList[i].List_pic = "https://images.weserv.nl/?url=" + this.categoryList[i].List_pic
-          // }
+          // console.log(this.categoryList)
+
+          for (let i = 0; i < this.categoryList.length; i++) {
+            let ebookIdList = this.categoryList[i].Ebook_id.split(",")
+            // this.getData(0, ebookIdList.length, i, ebookIdList)
+            this.$set(this.categoryList, i, Object.assign(this.categoryList[i], {
+              ebookMsg: []
+            }))
+            for (let j = 0; j < ebookIdList.length; j++) {
+              // 根据书籍id获取书籍信息
+              this.$http.get('/ebook/getmsg/', { params: { id: ebookIdList[j] } }).then((resp) => {
+                if (resp === null && resp.data === null) {
+                  this.$message({
+                    type: 'error',
+                    message: '服务端数据格式错误'
+                  })
+                  return
+                } else {
+                  resp.data.Pic = "https://images.weserv.nl/?url=" + resp.data.Pic
+                  this.categoryList[i].ebookMsg.push(resp.data)
+                }
+              })
+
+            }
+
+          }
         }
       })
 
@@ -266,21 +292,48 @@ export default {
               grade: this.msgList[i].Grade
             })
           }
-
-          // for(var j=0;j<this.buyTimesList.length;j++){
-
-          // }
           this.buyTimesList.sort(this.sortNumber)
           this.gradeList.sort(this.sortGrade)
-          console.log(this.buyTimesList, this.gradeList)
+          this.buyTimesList = this.buyTimesList.slice(0, 10)
+          this.gradeList = this.gradeList.slice(0, 10)
+
         }
       })
     },
-    sortNumber (a, b) {//升序
+
+    sortNumber (a, b) {
       return b.buy_times - a.buy_times
     },
-    sortGrade (a, b) {//升序
+    sortGrade (a, b) {
       return b.grade - a.grade
+    },
+    // 跳转到书籍详情页面
+    jumpToBook (index, item) {
+      switch (item) {
+        case 'editorList':
+          // 小编推荐
+          this.$router.push({ name: 'book', params: { ebook_id: this.editorList[index].Ebook_id } })
+          break
+        case 'buyTimesList':
+          // 畅销图书榜
+          this.$router.push({ name: 'book', params: { ebook_id: this.buyTimesList[index].id } })
+          break
+        case 'gradeList':
+          //  高分图书榜
+          this.$router.push({ name: 'book', params: { ebook_id: this.gradeList[index].id } })
+          break
+
+      }
+
+
+    },
+    jumpToCategoryBook (index, indexs) {
+      this.$router.push({ name: 'book', params: { ebook_id: this.categoryList[index].ebookMsg[indexs].Id } })
+
+    },
+    // 跳转到书单显示页面
+    jumpToList (index) {
+      this.$router.push({ name: 'list', params: { list_id: this.sdList[index].Id } })
     }
   },
   mounted () {
@@ -308,13 +361,16 @@ export default {
 
 .header {
   width: 100%;
-  height: 30px;
+  height: 50px;
   position: relative;
-  /* top: 0; */
-  /* position: fixed; */
   top: 0px;
   left: 0px;
   background-color: rgb(243, 235, 222);
+  line-height: 50px;
+}
+.user_menu {
+  position: absolute;
+  right: 50px;
 }
 .title {
   width: 100%;
@@ -376,6 +432,7 @@ export default {
   left: -70px;
   /* margin: 20px; */
   /* overflow: hidden; */
+  cursor: pointer;
 }
 .body_title {
   font-size: 20px;
@@ -400,11 +457,7 @@ export default {
   width: 250px;
   height: 60px;
 }
-.user_menu {
-  /* float: right; */
-  position: absolute;
-  right: 50px;
-}
+
 .user_DropdownItem {
   height: 30px;
   line-height: 30px;
@@ -421,5 +474,22 @@ export default {
 }
 .right_body_font {
   font-size: 15px;
+  text-align: center;
+  line-height: 50px;
+}
+.right_body_category {
+  position: relative;
+  /* top: 60px; */
+  height: 50px;
+  border-bottom: 1px dashed rgb(238, 224, 201);
+}
+.body_title_right {
+  font-size: 20px;
+  color: #4c3218;
+  /* float: left; */
+  /* margin-top: 20px; */
+  /* margin-left: 20px; */
+  line-height: 60px;
+  font-weight: 400;
 }
 </style>
