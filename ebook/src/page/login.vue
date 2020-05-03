@@ -51,6 +51,12 @@
           <i-input type="password"></i-input>
         </Form-item>
         <Form-item
+          label="确认密码"
+          prop="repasswd"
+        >
+          <i-input type="password"></i-input>
+        </Form-item>
+        <Form-item
           label="手机号"
           prop="age"
         >
@@ -58,6 +64,28 @@
             type="text"
             number
           ></i-input>
+        </Form-item>
+        <Form-item
+          label="真实姓名"
+          prop="realname"
+        >
+          <i-input type="text"></i-input>
+        </Form-item>
+        <Form-item
+          label="身份证号"
+          prop="number"
+        >
+          <i-input type="text"></i-input>
+        </Form-item>
+        <Form-item
+          label="性别"
+          prop="sex"
+        >
+          <RadioGroup>
+            <!-- v-model="disabledGroup" -->
+            <Radio label="男"></Radio>
+            <Radio label="女"></Radio>
+          </RadioGroup>
         </Form-item>
         <Form-item>
           <i-button
@@ -160,7 +188,7 @@ export default {
 }
 .check {
   width: 400px;
-  height: 400px;
+  /* height: 400px; */
   border: 1px solid #fff;
   border-radius: 25px;
   padding: 30px;
