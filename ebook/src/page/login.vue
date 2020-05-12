@@ -109,7 +109,9 @@ export default {
       single: false,
       iflogin: true,
       username: "",
-      password: ""
+      password: "",
+      userid:null,
+      userlevel:null
     }
   },
   methods: {
@@ -153,18 +155,44 @@ export default {
           return
         }
         if (resp.data !== -1) {
-          console.log(resp.data)
+          // console.log(resp.data)
+          this.userid=resp.data
+           this.$http.get('/ebook/userlevel', { params: {id:this.userid} }).then((resp) => {
+        if (resp === null && resp.data === null) {
+          this.$message({
+            type: 'error',
+            message: '服务端数据格式错误'
+          })
+          return
+        }else{
+          this.userlevel=resp.data
           //设置Vuex登录标志为true，默认userLogin为false
           this.$store.dispatch("userLogin", true);
           //Vuex在用户刷新的时候userLogin会回到默认值false，所以我们需要用到HTML5储存
           //我们设置一个名为Flag，值为isLogin的字段，作用是如果Flag有值且为isLogin的时候，证明用户已经登录了。
           localStorage.setItem("Flag", "isLogin");
-          localStorage.setItem("Uid", resp.data);
+          localStorage.setItem("Uid", this.userid);
+          localStorage.setItem("Ulevel", this.userlevel);
+
           //iViewUi的友好提示
           // this.$Message.success(data.data.message);
           //登录成功后跳转到指定页面
-          this.$router.push("/");
+          // console.log(this.userlevel,'level')
+          if(this.userlevel===1){
+            this.$router.push("/");
+          }else if(this.userlevel===2){
+            this.$store.dispatch("userLevel", true);
+            this.$router.push("/manage");
+          }else if(this.userlevel===3){
+             this.$store.dispatch("userLevel", true);
+             this.$store.dispatch("userManage", true);
+            this.$router.push("/manage");
+          }
+
           this.$store.commit('setUserId', resp.data)
+        }
+           })
+
         }
       })
     }

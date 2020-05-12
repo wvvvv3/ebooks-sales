@@ -13,6 +13,8 @@
         search
         placeholder="书名、作者、ISBN"
         style="width:600px;margin:25px;position:absolute;left:200px;"
+        v-model="searchitem"
+        @on-search='search'
       />
       <!-- <img
         src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1585031875773&di=48906390ab17ea57c1eaabd279269c5a&imgtype=0&src=http%3A%2F%2Fwww.17qq.com%2Fimg_qqtouxiang%2F11862985.jpeg"
@@ -189,7 +191,8 @@ export default {
       buyTimesList: [],
       gradeList: [],
       msgList: [],
-      ebookMsgList: []
+      ebookMsgList: [],
+      searchitem: ''
     }
   },
   methods: {
@@ -334,6 +337,17 @@ export default {
     // 跳转到书单显示页面
     jumpToList (index) {
       this.$router.push({ name: 'list', params: { list_id: this.sdList[index].Id } })
+    },
+    search () {
+      console.log(this.searchitem)
+      switch (this.searchitem) {
+        case '想北平':
+          this.$router.push({ name: 'book', params: { ebook_id: 2 } })
+          break;
+        case '101123':
+          this.$router.push({ name: 'book', params: { ebook_id: 1 } })
+          break;
+      }
     }
   },
   mounted () {

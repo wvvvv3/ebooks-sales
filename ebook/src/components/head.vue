@@ -1,7 +1,11 @@
 <template>
 
   <div class="user_menu">
-
+    <Icon
+      type="md-home"
+      style="font-size:25px;margin-left:10px;cursor: pointer;"
+      @click="jumpToHome"
+    />
     <!-- 购物车 -->
     <Icon
       type="ios-cart"
@@ -9,10 +13,10 @@
       @click="jumpToCart"
     />
     <!-- 书架 -->
-    <Icon
+    <!-- <Icon
       type="ios-book-outline"
       style="font-size:25px;margin-left:10px;cursor: pointer;"
-    />
+    /> -->
     <!-- 用户 -->
     <Dropdown @on-click="clickMenu">
       <a
@@ -33,12 +37,12 @@
           name="order"
           class="user_DropdownItem"
         >我的订单</DropdownItem>
-        <DropdownItem
+        <!-- <DropdownItem
           name="shelf"
           class="user_DropdownItem"
-        >我的书架</DropdownItem>
+        >我的书架</DropdownItem> -->
         <DropdownItem
-          name="chart"
+          name="cart"
           class="user_DropdownItem"
         >我的购物车</DropdownItem>
         <DropdownItem
@@ -60,19 +64,37 @@ export default {
   },
   methods: {
     jumpToCart () {
-      this.$router.push({ path: '/cart' })
+      this.$router.push({ name: 'user', params: { name: '3' } })
     },
     // 点击下拉菜单
     clickMenu (name) {
       // 点击退出登录
-      if (name === 'quit') {
-        this.$store.dispatch("userLogin", false);
-        localStorage.removeItem("Flag")
-        localStorage.removeItem("Uid")
-        this.$store.state.userId = 0
-        this.$router.push("/login");
-        // console.log(this.$store.getters.userId, '退出登录', this.$store.getters.isLogin)
-      } w
+      switch (name) {
+        case 'quit':
+          this.$store.dispatch("userLogin", false);
+          localStorage.removeItem("Flag")
+          localStorage.removeItem("Uid")
+          localStorage.removeItem("Ulevel")
+          this.$store.state.userId = 0
+          this.$router.push("/login");
+          break;
+        case 'message':
+          this.$router.push({ name: 'user', params: { name: '1' } })
+          break;
+        case 'cart':
+          this.$router.push({ name: 'user', params: { name: '3' } })
+          break;
+        case 'order':
+          this.$router.push({ name: 'user', params: { name: '2' } })
+          break;
+        default:
+          break;
+      }
+
+
+    },
+    jumpToHome () {
+      this.$router.push("/");
     }
   }
 }

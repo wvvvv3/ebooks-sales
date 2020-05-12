@@ -7,7 +7,9 @@ export default new Vuex.Store({
   // 设置属性
   state: {
     isLogin: false,
-    userId: 0
+    userId: 0,
+    userLevel:false,
+    userManage:false
   },
 
   // 获取属性的状态
@@ -15,7 +17,11 @@ export default new Vuex.Store({
     //获取登录状态
     isLogin: state => state.isLogin,
     // 获取用户登录id
-    userId: state => state.userId
+    userId: state => state.userId,
+    // 获取用户级别(二，三)
+    userLevel: state => state.userLevel,
+    // 获取用户级别（三）
+    userManage: state => state.userManage,
   },
 
   // 设置属性状态

@@ -1,15 +1,15 @@
 <template>
   <div class="bg">
     <!-- 置顶用户信息 -->
-    <div class="header">
+    <!-- <div class="header">
 
       <Head class="user_menu"></Head>
-    </div>
-    <div class="bg_body">
+    </div> -->
+    <!-- <div class="bg_body"> -->
       <!-- 购物车标题 -->
-      <div class="cart_title">
+      <!-- <div class="cart_title">
         <p class="cart_title_p">购物车</p>
-      </div>
+      </div> -->
       <!-- 购物车内容标题 -->
       <div class="table_title">
         <p class="table_title_p table_title_msg">商品信息</p>
@@ -55,18 +55,19 @@
         <Button
           type="error"
           class="cart_bottom_button"
+          @click="jumpToOrder"
         >结算</Button>
       </div>
-    </div>
+    <!-- </div> -->
   </div>
 </template>
 
 <script>
-import head from '@/components/head.vue'
+// import head from '@/components/head.vue'
 export default {
-  components: {
-    'Head': head
-  },
+  // components: {
+  //   'Head': head
+  // },
   data () {
     return {
       bookId: '',
@@ -175,6 +176,23 @@ export default {
       })
 
       // this.bookMsg.splice(index, 1)
+    },
+    jumpToOrder(){
+      // console.log(this.bookMsg)
+      var times=0
+      var bookid=''
+      for(var i=0;i<this.bookMsg.length;i++){
+
+        if(this.bookMsg[i].check===true){
+          if(times===0){
+             bookid=bookid+this.bookMsg[i].Id
+          }else{
+            bookid=bookid+','+this.bookMsg[i].Id
+          }
+         times++
+        }
+      }
+       this.$router.push({ name: 'order', params: { id: bookid } })
     }
   }
 }
@@ -194,7 +212,7 @@ export default {
   /* -moz-background-size: 100% 100%;
   background-size: 100% 100%; */
   /* position: absolute; */
-  background-color: rgb(243, 235, 222);
+  /* background-color: rgb(243, 235, 222); */
 }
 .bg_body {
   position: absolute;
@@ -202,7 +220,7 @@ export default {
   height: 100%;
   left: 20%;
   right: 20%;
-  background-color: #f6f6f1;
+  /* background-color: #f6f6f1; */
 }
 .header {
   width: 100%;
@@ -210,7 +228,7 @@ export default {
   position: relative;
   top: 0px;
   left: 0px;
-  background-color: #f1f1ec;
+  /* background-color: #f1f1ec; */
   line-height: 50px;
 }
 .user_menu {
@@ -243,7 +261,7 @@ export default {
   width: 90%;
   height: 50px;
   margin: 0 auto;
-  background-color: rgb(243, 229, 236);
+  /* background-color: rgb(243, 229, 236); */
 }
 .table_title_p {
   font-size: 16px;
@@ -312,8 +330,9 @@ export default {
   z-index: 9999;
   position: fixed;
   bottom: 0px;
-  left: 20%;
-  right: 20%;
+  width:40%;
+  /* left: 20%;
+  right: 20%; */
   line-height: 50px;
   cursor: pointer;
 
