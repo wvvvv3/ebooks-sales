@@ -34,7 +34,7 @@
             class="body_input"
           ></Input>
         </FormItem>
-        <FormItem
+        <!-- <FormItem
           label="省"
           class="formitem"
         >
@@ -73,7 +73,7 @@
             placeholder=""
             class="body_input"
           ></Input>
-        </FormItem>
+        </FormItem> -->
 
       </Form>
       <div class="table_title">
@@ -108,9 +108,25 @@
         title="支付"
         @on-ok="payOk"
       >
-        <div id="qrcode">
+        <div
+          id="qrcode"
+          v-show="pay1"
+        >
 
         </div>
+        <p
+          style="color:green;font-size:25px;"
+          v-show="pay2"
+        >下载成功!</p>
+        <button
+          @click="download"
+          style="border:0px;background-color:white;cursor:default;"
+        > <a
+            href="../../static/xx.txt"
+            download="xx.txt"
+            style="color:white;cursor:default;"
+          >xx</a>
+        </button>
       </Modal>
 
     </div>
@@ -137,7 +153,9 @@ export default {
         District: '',
         Address: ''
       },
-      showPay: false
+      showPay: false,
+      pay1: false,
+      pay2: false
     }
   },
   mounted () {
@@ -234,6 +252,7 @@ export default {
     // },
     qrcode () {
       this.showPay = true
+      this.pay1 = true
       let qrcode = new QRCode('qrcode', {
         width: 100,
         height: 100, // 高度
@@ -256,6 +275,10 @@ export default {
         day = "0" + day;
       }
       return year + '-' + month + '-' + day
+    },
+    download () {
+      this.pay1 = false
+      this.pay2 = true
     }
   },
   watch: {

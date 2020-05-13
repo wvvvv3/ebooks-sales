@@ -31,7 +31,7 @@
             :disabled="disable"
           ></Input>
         </FormItem>
-        <FormItem
+        <!-- <FormItem
           label="省"
           class="formitem"
         >
@@ -74,7 +74,7 @@
             class="body_input"
             :disabled="disable"
           ></Input>
-        </FormItem>
+        </FormItem> -->
         <FormItem
           label="总价"
           class="formitem"

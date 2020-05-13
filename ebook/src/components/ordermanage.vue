@@ -1,6 +1,6 @@
 <template>
   <div>
-<!--
+    <!--
     <Button
       :size="buttonSize"
       icon="md-add"
@@ -33,7 +33,7 @@
           icon="md-trash"
         ></Button>
       </template> -->
-      </Table>
+    </Table>
   </div>
 </template>
 
@@ -43,8 +43,8 @@ export default {
     return {
       columns1: [
         {
-        title: '订单Id',
-        key: 'Id'
+          title: '订单Id',
+          key: 'Id'
         },
         {
           title: '订单编号',
@@ -59,18 +59,18 @@ export default {
           title: '收货人姓名',
           key: 'Order_name'
         },
-        {
-          title: '省',
-          key: 'Province'
-        },
-        {
-          title: '市',
-          key: 'City'
-        },
-        {
-          title: '区',
-          key: 'District'
-        },
+        // {
+        //   title: '省',
+        //   key: 'Province'
+        // },
+        // {
+        //   title: '市',
+        //   key: 'City'
+        // },
+        // {
+        //   title: '区',
+        //   key: 'District'
+        // },
         {
           title: '地址',
           key: 'Address'
@@ -95,13 +95,13 @@ export default {
       ]
     }
   },
-   mounted () {
+  mounted () {
     this.loadData()
   },
   methods: {
     loadData () {
       // 获取全部订单信息
-       this.$http.get('/ebook/getordermsg/').then((resp) => {
+      this.$http.get('/ebook/getordermsg/').then((resp) => {
         if (resp === null && resp.data === null) {
           this.$message({
             type: 'error',
@@ -109,9 +109,9 @@ export default {
           })
           return
         } else {
-          this.data1=resp.data
+          this.data1 = resp.data
         }
-       })
+      })
     }
   }
 }
